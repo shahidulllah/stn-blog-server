@@ -3,6 +3,8 @@ import cookieParser from 'cookie-parser';
 const app = express();
 import cors from 'cors';
 import router from './app/routes';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
 
 //perser
 app.use(express.json());
@@ -16,5 +18,11 @@ app.use('/api', router);
 app.get('/', (req, res) => {
   res.send('Hello, Welcome to the STN blog Server!');
 });
+
+//global Error 
+app.use(globalErrorHandler)
+
+//Not Found
+app.use(notFound)
 
 export default app;
