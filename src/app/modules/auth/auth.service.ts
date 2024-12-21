@@ -3,7 +3,7 @@ import AppError from '../../errors/appError';
 import UserModel from '../user/user.model';
 import { comparePassword, generateToken } from './auth.utils';
 
-const loginUser = async (email: string, password: string) => {
+export const loginUser = async (email: string, password: string) => {
   //check if the user exists
   const user = await UserModel.findOne({ email });
 
