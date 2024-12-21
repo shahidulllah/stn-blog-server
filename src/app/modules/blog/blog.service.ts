@@ -3,6 +3,7 @@ import AppError from '../../errors/appError';
 import { TBlog } from './blog.interface';
 import { BlogModel } from './blog.model';
 
+//Create blog
 export const createBlog = async (
   title: string,
   content: string,
@@ -15,6 +16,7 @@ export const createBlog = async (
   return newBlog;
 };
 
+//Update blog
 export const updateBlog = async (
   blogId: string,
   userId: string,
@@ -24,7 +26,7 @@ export const updateBlog = async (
 
   if (!blog) {
     throw new AppError(
-      StatusCodes.BAD_REQUEST,
+      StatusCodes.NOT_FOUND,
       'Blog not found or you are not the author',
     );
   }
@@ -33,4 +35,22 @@ export const updateBlog = async (
   await blog.save();
 
   return blog;
+};
+
+//Delete blog
+export const deleteBlog = async (
+  blogId: string,
+  userId: string,
+): Promise<void> => {
+  const blog = await BlogModel.findOne({ _id: blogId, author: userId });
+
+  if (!blog) {
+    throw new AppError(
+      StatusCodes.NOT_FOUND,
+      'Blog not found or you are not the author',
+    );
+  }
+
+  await BlogModel.deleteOne({_id: blogId})
+
 };

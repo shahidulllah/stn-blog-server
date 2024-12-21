@@ -5,9 +5,10 @@ import {
   createBlogValidationSchema,
   updateBlogValidationSchema,
 } from './blog.validation';
-import { createBlog, updateBlog } from './blog.service';
+import { createBlog, deleteBlog, updateBlog } from './blog.service';
 import sendResponse from '../../utils/sendResponse';
 
+//Create blog
 export const createBlogController = catchAsync(async (req, res) => {
   const userId = req.user?.id;
 
@@ -35,6 +36,8 @@ export const createBlogController = catchAsync(async (req, res) => {
   });
 });
 
+
+//UpdateBLog
 export const updateBlogController = catchAsync(async (req, res) => {
   const userId = req.user?.id;
 
@@ -60,5 +63,26 @@ export const updateBlogController = catchAsync(async (req, res) => {
     success: true,
     message: 'Blog updated successfully',
     data: updatedBlog,
+  });
+});
+
+//Delete blog
+export const deleteBlogController = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'Unauthorized access');
+  }
+
+  const { id: blogId } = req.params;
+
+  //Delete the blog
+  await deleteBlog(blogId, userId)
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Blog deleted successfully',
+    data: {},
   });
 });
