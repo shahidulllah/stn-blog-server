@@ -21,19 +21,19 @@ export const blockUser = async (userId: string) => {
 
 //admin delete user
 export const deleteBlog = async (blogId: string) => {
-    // Find and delete the blog by ID
-    const blog = await BlogModel.findByIdAndDelete(blogId);
-  
-    if (!blog) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
-    }
-  
-    return blog;
-  };
+  // Find and delete the blog by ID
+  const blog = await BlogModel.findByIdAndDelete(blogId);
 
-  //Admin get all users
-  export const getAllUsers = async() => {
-    const users = await UserModel.find({}, '-password');
-
-    return users
+  if (!blog) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
   }
+
+  return blog;
+};
+
+//Admin get all users
+export const getAllUsers = async () => {
+  const users = await UserModel.find({}, '-password');
+
+  return users;
+};
