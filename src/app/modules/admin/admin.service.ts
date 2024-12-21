@@ -30,3 +30,10 @@ export const deleteBlog = async (blogId: string) => {
   
     return blog;
   };
+
+  //Admin get all users
+  export const getAllUsers = async() => {
+    const users = await UserModel.find({}, '-password');
+
+    return users
+  }
