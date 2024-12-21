@@ -39,7 +39,7 @@ export const updateBlogController = catchAsync(async (req, res) => {
   const userId = req.user?.id;
 
   if (!userId) {
-    throw new AppError(StatusCodes.FORBIDDEN, 'Unauthorized access');
+    throw new AppError(StatusCodes.UNAUTHORIZED, 'Unauthorized access');
   }
 
   const { id: blogId } = req.params;
