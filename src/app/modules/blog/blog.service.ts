@@ -6,7 +6,9 @@ export const createBlog = async (
   content: string,
   author: string,
 ): Promise<TBlog> => {
-  const newBlog = await BlogModel.create({ title, content, author });
+  const newBlog = (await BlogModel.create({ title, content, author })).populate(
+    'author',
+  );
 
   return newBlog;
 };
