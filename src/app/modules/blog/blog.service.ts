@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../errors/appError';
-import { TBlog } from './blog.interface';
+import { FetchBlogsOptions, TBlog } from './blog.interface';
 import { BlogModel } from './blog.model';
 
 //Create blog
@@ -51,6 +51,32 @@ export const deleteBlog = async (
     );
   }
 
-  await BlogModel.deleteOne({_id: blogId})
+  await BlogModel.deleteOne({ _id: blogId });
+};
 
+//Get all blogs
+export const fetchBlogs = async (options: FetchBlogsOptions) => {
+  const { search, sortBy = 'createdAt', sortOrder = 'desc', filter } = options;
+
+  //Query builder
+  const query: any = {};
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { content: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  if (filter) {
+    query.author = filter;
+  }
+
+  //Sorthing
+  const sortOptions: any = {};
+  sortOptions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+
+  //fetch blogs
+  return BlogModel.find(query)
+    .populate('author', 'name email')
+    .sort(sortOptions);
 };

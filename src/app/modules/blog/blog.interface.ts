@@ -8,3 +8,10 @@ export interface TBlog extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface FetchBlogsOptions {
+    search?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+    filter?: string;
+  }
