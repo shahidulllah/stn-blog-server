@@ -5,7 +5,7 @@ import {
   createBlogValidationSchema,
   updateBlogValidationSchema,
 } from './blog.validation';
-import { createBlog, deleteBlog, updateBlog } from './blog.service';
+import { createBlog, deleteBlog, fetchBlogs, updateBlog } from './blog.service';
 import sendResponse from '../../utils/sendResponse';
 
 //Create blog
@@ -35,7 +35,6 @@ export const createBlogController = catchAsync(async (req, res) => {
     data: newBlog,
   });
 });
-
 
 //UpdateBLog
 export const updateBlogController = catchAsync(async (req, res) => {
@@ -77,12 +76,32 @@ export const deleteBlogController = catchAsync(async (req, res) => {
   const { id: blogId } = req.params;
 
   //Delete the blog
-  await deleteBlog(blogId, userId)
+  await deleteBlog(blogId, userId);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Blog deleted successfully',
     data: {},
+  });
+});
+
+//Get all blogs
+export const getAllBlogsController = catchAsync(async (req, res) => {
+  const { search, sortBy, sortOrder, filter } = req.query;
+
+  //Fetch blogs
+  const blogs = await fetchBlogs({
+    search: search as string,
+    sortBy: sortBy as string,
+    sortOrder: sortOrder as 'asc' | 'desc',
+    filter: filter as string,
+  });
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Blogs fetched successfully',
+    data: blogs,
   });
 });
